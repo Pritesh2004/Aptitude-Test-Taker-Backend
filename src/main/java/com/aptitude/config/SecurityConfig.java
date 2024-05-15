@@ -40,7 +40,7 @@ public class SecurityConfig {
 		.csrf().disable()
 		.cors().disable()
 		.authorizeRequests()
-		.requestMatchers("/generate-token", "/user/").permitAll()
+		.requestMatchers("/generate-token", "/user/", "/user/verify-otp").permitAll()
 		.requestMatchers(HttpMethod.OPTIONS).permitAll()
 		.anyRequest().authenticated()
 		.and()
@@ -69,15 +69,15 @@ public class SecurityConfig {
 
 	}
 
-//	@Bean
-//	public BCryptPasswordEncoder passwordEncoder() {
-//		return new BCryptPasswordEncoder();
-//	}
-	
 	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return NoOpPasswordEncoder.getInstance();
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
+	
+//	@Bean
+//	public PasswordEncoder passwordEncoder() {
+//		return NoOpPasswordEncoder.getInstance();
+//	}
 
 	@Bean
 	public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration configuration) throws Exception {

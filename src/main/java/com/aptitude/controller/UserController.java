@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,8 @@ public class UserController {
 	@Autowired
 	private UserServiceImpl userService;
 	
+	 @Autowired
+	 private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@Autowired
 	private MailSenderService mailService;
@@ -40,11 +43,13 @@ public class UserController {
 	public ResponseEntity<User> registerUser(@RequestBody User newuser) throws Exception{
 		
 		
+        newuser.setPassword(this.bCryptPasswordEncoder.encode(newuser.getPassword()));
+
 		Set<UserRole> roles = new HashSet<>();
 		
 		Role role = new Role();
-		role.setRoleId(40l);
-		role.setRoleName("ADMIN");
+		role.setRoleId(20l);
+		role.setRoleName("NORMAL");
 		
 		UserRole userRole = new UserRole();
 		userRole.setRole(role);
