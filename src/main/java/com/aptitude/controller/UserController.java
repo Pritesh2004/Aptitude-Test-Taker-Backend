@@ -21,7 +21,7 @@ import com.aptitude.entity.Role;
 import com.aptitude.entity.User;
 import com.aptitude.entity.UserRole;
 import com.aptitude.service.MailSenderService;
-import com.aptitude.service.UserServiceImpl;
+import com.aptitude.service.implementations.UserServiceImpl;
 
 @RestController
 @RequestMapping("/user")

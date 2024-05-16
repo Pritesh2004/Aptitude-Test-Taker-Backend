@@ -1,4 +1,4 @@
-package com.aptitude.service;
+package com.aptitude.service.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

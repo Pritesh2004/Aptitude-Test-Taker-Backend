@@ -1,4 +1,4 @@
-package com.aptitude.service;
+package com.aptitude.service.implementations;
 
 import java.util.Set;
 
@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.aptitude.entity.User;
 import com.aptitude.entity.UserRole;
+import com.aptitude.helper.UserFoundException;
 import com.aptitude.repository.RoleRepository;
 import com.aptitude.repository.UserRepository;
+import com.aptitude.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -27,7 +29,7 @@ public class UserServiceImpl implements UserService{
 		if(existingUser!=null) {
 			
 			System.out.println("User already present");
-			throw new Exception("User already present");
+			throw new UserFoundException("User already present");
 		}
 		else {
 			

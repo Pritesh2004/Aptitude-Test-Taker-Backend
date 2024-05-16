@@ -20,7 +20,7 @@ import com.aptitude.entity.JwtRequest;
 import com.aptitude.entity.JwtResponse;
 import com.aptitude.entity.User;
 import com.aptitude.helper.UserNotFoundException;
-import com.aptitude.service.UserDetailsServiceImpl;
+import com.aptitude.service.implementations.UserDetailsServiceImpl;
 
 @RestController
 @CrossOrigin("*")

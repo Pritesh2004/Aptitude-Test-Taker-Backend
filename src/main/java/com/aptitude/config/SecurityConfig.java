@@ -17,7 +17,7 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.aptitude.service.UserDetailsServiceImpl;
+import com.aptitude.service.implementations.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
