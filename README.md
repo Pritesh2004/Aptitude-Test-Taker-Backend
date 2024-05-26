@@ -2,7 +2,7 @@
 
 Welcome to **AptitudeAce**, an online platform designed to provide first-hand practice on various aptitude tests. This repository contains the backend code for the project, built using Spring Boot and several other Spring modules to deliver a robust, secure, and feature-rich application.
 
-# Frontend Repository - [https://github.com/Pritesh2004/AptitudeAce-Frontend](https://github.com/Pritesh2004/AptitudeAce-Frontend)
+## Frontend Repository - [https://github.com/Pritesh2004/AptitudeAce-Frontend](https://github.com/Pritesh2004/AptitudeAce-Frontend)
 
 
 ## Features
