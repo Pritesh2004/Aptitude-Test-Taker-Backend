@@ -1,4 +1,4 @@
-# AptitudeAce - Mock Aptitude Test Platform
+# AptitudeAce - Mock Aptitude Test Platform Backend
 
 Welcome to **AptitudeAce**, an online platform designed to provide first-hand practice on various aptitude tests. This repository contains the backend code for the project, built using Spring Boot and several other Spring modules to deliver a robust, secure, and feature-rich application.
 
