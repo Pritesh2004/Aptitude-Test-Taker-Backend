@@ -3,6 +3,7 @@ package com.aptitude.controller;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,59 +23,64 @@ import com.aptitude.entity.User;
 import com.aptitude.helper.UserNotFoundException;
 import com.aptitude.service.implementations.UserDetailsServiceImpl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @CrossOrigin("*")
 public class AuthenticationController {
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
-	@Autowired
-	private UserDetailsServiceImpl userDetailsServiceImpl;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-	@Autowired
-	private JwtUtil jwtUtils;
+    @Autowired
+    private UserDetailsServiceImpl userDetailsServiceImpl;
 
-	
-	// generate token
-	@PostMapping("/generate-token")
-	public ResponseEntity<?> generateToken(@RequestBody JwtRequest jwtRequest) throws Exception {
+    @Autowired
+    private JwtUtil jwtUtils;
 
-		try {
+    // Generate token
+    @PostMapping("/generate-token")
+    public ResponseEntity<?> generateToken(@RequestBody JwtRequest jwtRequest) {
+        try {
+            authenticate(jwtRequest.getUsername(), jwtRequest.getPassword());
+            UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(jwtRequest.getUsername());
+            String token = jwtUtils.generateToken(userDetails);
+            return ResponseEntity.ok(new JwtResponse(token));
+        } catch (UserNotFoundException e) {
+            logger.error("User not found: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } catch (DisabledException e) {
+            logger.error("User disabled: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is disabled");
+        } catch (BadCredentialsException e) {
+            logger.error("Invalid credentials: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        } catch (Exception e) {
+            logger.error("Authentication error: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Authentication error");
+        }
+    }
 
-			authenticate(jwtRequest.getUsername(), jwtRequest.getPassword());
+    private void authenticate(String username, String password) throws Exception {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (DisabledException e) {
+            throw new DisabledException("User is disabled");
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Invalid credentials");
+        }
+    }
 
-		} catch (UserNotFoundException e) {
-			e.printStackTrace();
-			throw new Exception("User not found ");
-		}
-
-		///////////// authenticate
-
-		UserDetails userDetails = this.userDetailsServiceImpl.loadUserByUsername(jwtRequest.getUsername());
-		String token = this.jwtUtils.generateToken(userDetails);
-		return ResponseEntity.ok(new JwtResponse(token));
-
-	}
-
-	private void authenticate(String username, String password) throws Exception {
-
-		try {
-
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-
-		} catch (DisabledException e) {
-			throw new Exception("USER DISABLED " + e.getMessage());
-		} catch (BadCredentialsException e) {
-			throw new Exception("Invalid Credentials " + e.getMessage());
-		}
-	}
-
-	// return the details of current user
-	@GetMapping("/current-user")
-	public User getCurrentUser(Principal principal) {
-		return ((User) this.userDetailsServiceImpl.loadUserByUsername(principal.getName()));
-
-	}
-
+    // Return the details of the current user
+    @GetMapping("/current-user")
+    public ResponseEntity<?> getCurrentUser(Principal principal) {
+        if (principal == null || principal.getName() == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }
+        User user = (User) userDetailsServiceImpl.loadUserByUsername(principal.getName());
+        return ResponseEntity.ok(user);
+    }
 }

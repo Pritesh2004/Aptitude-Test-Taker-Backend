@@ -16,6 +16,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class User implements UserDetails{
@@ -25,13 +28,21 @@ public class User implements UserDetails{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	private String username;
-	
-	private String password;
-	
-	private String email;
-	
-	private String fullName;
+	@NotBlank(message = "Username is mandatory")
+    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
+    private String username;
+
+    @NotBlank(message = "Password is mandatory")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
+    private String password;
+
+    @NotBlank(message = "Email is mandatory")
+    @Email(message = "Email should be valid")
+    private String email;
+
+    @NotBlank(message = "Full Name is mandatory")
+    @Size(min = 2, max = 100, message = "Full Name must be between 2 and 100 characters")
+    private String fullName;
 	
     private boolean enabled = true;
 
@@ -71,8 +82,6 @@ public class User implements UserDetails{
 		this.fullName = fullName;
 		this.enabled = enabled;
 	}
-
-	
 	
 	
 	public Set<UserRole> getUserRoles() {
@@ -150,13 +159,5 @@ public class User implements UserDetails{
 		// TODO Auto-generated method stub
 		return enabled;
 	}
-
-
-
-	
-	
-	
-	
-	
 
 }

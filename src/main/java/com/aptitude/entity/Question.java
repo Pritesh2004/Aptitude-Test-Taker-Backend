@@ -1,5 +1,7 @@
 package com.aptitude.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,7 +28,7 @@ public class Question {
     private String option3;
     private String option4;
 
-
+    //@JsonIgnore
     private String answer;
 
     @Transient

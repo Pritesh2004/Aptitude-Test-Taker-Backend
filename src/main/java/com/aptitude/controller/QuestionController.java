@@ -49,10 +49,7 @@ public class QuestionController {
     //get all question of any quid
     @GetMapping("/quiz/{qid}")
     public ResponseEntity<?> getQuestionsOfQuiz(@PathVariable("qid") Long qid) {
-//        Quiz quiz = new Quiz();
-//        quiz.setqId(qid);
-//        Set<Question> questionsOfQuiz = this.service.getQuestionsOfQuiz(quiz);
-//        return ResponseEntity.ok(questionsOfQuiz);
+
 
         Quiz quiz = this.quizService.getQuiz(qid);
         Set<Question> questions = quiz.getQuestions();
@@ -76,7 +73,6 @@ public class QuestionController {
 
 //        return ResponseEntity.ok(list);
 
-
     }
 
 
@@ -93,7 +89,7 @@ public class QuestionController {
     }
 
 
-    //eval quiz
+    //eval quizb
     @PostMapping("/eval-quiz")
     public ResponseEntity<?> evalQuiz(@RequestBody List<Question> questions) {
         System.out.println(questions);
